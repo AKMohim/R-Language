@@ -1,0 +1,410 @@
+---
+title: "R Data Structures"
+author: "Abdul Kader Mohim"
+date: "`r Sys.Date()`"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+R provides several built-in data structures for storing and manipulating data.<br>
+The main data structures in R are:<br>
+
+Vectors<br>
+Matrices<br>
+Arrays<br>
+Data Frames<br>
+Factors<br>
+Lists<br>
+
+# Vectors
+# Creating Different Types of Vectors
+```{r}
+# Creating Different Types of Vectors
+# Numeric Vector
+number_vector <- c(11, 22, 33, 44, 55)
+print(number_vector)
+
+# Character Vector
+character_vector <- c("Avocados","BAnana", "Coconut", "Dates", "Eggfruit")
+print(character_vector)
+
+# Logical Vector
+logic_vector <- c(FALSE, TRUE, FALSE, TRUE)
+print(logic_vector)
+
+```
+```{r}
+# Vector Operations
+# Arithmetic Operations
+vector1 <- c(22, 44, 66)
+vector2 <- c(11, 33, 55)
+
+sum_vector <- vector1 + vector2
+mul_vector <- vector1 * vector2 
+sub_vector<- vector1-vector2
+
+print(sum_vector) 
+print(mul_vector) 
+print(sub_vector)
+
+```
+```{r}
+# Accessing Elements in a Vector
+# Create a vector
+number_vector <- c(111, 222, 333, 444, 555)
+
+# Access elements using index (1-based index)
+print(number_vector[4])  # Output: 20
+
+# Access multiple elements
+print(number_vector[c(2, 4, 5)])  # Output: 10 30 50
+
+# Access elements using a condition
+print(number_vector[number_vector > 250])  # Output: 30 40 50
+
+```
+```{r}
+# Modifying a Vector
+# Modify an element
+number_vector[2] <- 22
+print(number_vector)  # Output: 10 100 30 40 50
+
+# Append new elements
+number_vector <- c(number_vector, 666, 777)
+print(number_vector)  # Output: 10 100 30 40 50 60 70
+
+```
+```{r}
+# Vector Functions
+vector <- c(200, 150, 100, 50, 250, 300, 350, 400)
+
+# Length of the vector
+print(length(vector)) 
+
+# Sum of all elements
+print(sum(vector))
+
+# Mean (average) of elements
+print(mean(vector)) 
+
+# Sorting a vector
+sorted_vector <- sort(vector, decreasing = FALSE)
+print(sorted_vector)
+
+```
+```{r}
+# Sequence and Repetition in Vectors
+# Sequence from 1 to 10
+seq_vector <- seq(11, 110, by = 4)  # Steps of 2
+print(seq_vector)  
+
+# Repeat elements
+repeat_vector <- rep(c(1, 22, 333,4444), times = 5)  # Repeat entire vector
+print(repeat_vector)  # Output: 1 2 3 1 2 3 1 2 3
+
+```
+# Matrices
+```{r}
+# Creating a 3x3 matrix (filled column-wise by default)
+matrixs <- matrix(1:20, nrow = 4, ncol = 5)
+print(matrixs)
+
+```
+```{r}
+# Filling a Matrix Row-Wise
+mat <- matrix(1:15, nrow = 3, byrow = TRUE)
+print(mat)
+
+```
+```{r}
+# Naming Rows and Columns
+# Creating a matrix
+matri <- matrix(1:9, nrow = 3)
+
+# Assigning row and column names
+rownames(matri) <- c("Tahabi", "Tanzil", "Gahana")
+colnames(matri) <- c("course1", "course2", "course3")
+
+print(matri)
+
+```
+```{r}
+# Accessing Elements in a Matrix
+# Create a 3x3 matrix
+mat <- matrix(1:16, nrow = 4)
+
+# Access element at row 2, column 3
+print(mat[4, 4])  # Output: 8
+print(mat[3, 2])
+# Access entire row 1
+print(mat[3, ])  # Output: 1 4 7
+
+# Access entire column 2
+print(mat[, 1])  # Output: 4 5 6
+
+```
+```{r}
+# Matrix Arithmetic
+mat1 <- matrix(1:4, nrow = 2)
+mat2 <- matrix(5:8, nrow = 2)
+
+# Matrix addition
+sum_mat <- mat1 + mat2
+print(sum_mat)
+
+sub_mat <- mat2 - mat1
+print(sub_mat)
+
+# Matrix multiplication (element-wise)
+prod_mat <- mat1 * mat2
+print(prod_mat)
+
+# Matrix multiplication (dot product)
+dot_prod_mat <- mat1 %*% mat2  # %*% for matrix multiplication
+print(dot_prod_mat)
+
+```
+```{r}
+#Transpose and Inverse of a Matrix
+# Transpose of a matrix
+t_mat <- t(mat)
+print(t_mat)
+
+# Inverse of a matrix (for square matrices)
+square_mat <- matrix(c(2, 3, 1, 4), nrow = 2)
+inv_mat <- solve(square_mat)
+print(inv_mat)
+
+```
+# Arrays
+```{r}
+# Creating an array with dimensions (3x3x2)
+arr <- array(1:32, dim = c(4, 4, 2))
+print(arr)
+arr1 <- array(1:40, dim = c(4, 5, 2))
+print(arr1)
+
+```
+```{r}
+# Accessing Elements in an Array
+# Create a 3x3x2 array
+arr <- array(1:50, dim = c(5, 5, 2))
+
+# Access element at [2nd row, 3rd column, 1st layer]
+print(arr[3, 3, 1])  # Output: 8
+
+# Access entire 2nd row from Layer 1
+print(arr[5, , 1])
+
+# Access entire 3rd column from Layer 2
+print(arr[, 4, 2])
+
+
+```
+```{r}
+#Performing Operations on Arrays
+# Creating two 3x3x2 arrays
+arr1 <- array(1:72, dim = c(6, 6, 2))
+arr2 <- array(73:144, dim = c(6, 6, 2))
+
+# Element-wise addition
+sum_arr <- arr1 + arr2
+print(sum_arr)
+
+sub_arr <- arr1 - arr2
+print(sub_arr)
+
+# Element-wise multiplication
+prod_arr <- arr1 * arr2
+print(prod_arr)
+
+```
+```{r}
+# Applying Functions to Arrays
+# Creating an array
+arr <- array(1:18, dim = c(3, 3, 2))
+
+# Sum of all elements in the array
+print(sum(arr))
+
+# Mean of all elements
+print(mean(arr))
+
+# Apply function to each row (margin = 1)
+apply(arr, MARGIN = 1, FUN = sum)
+
+# Apply function to each column (margin = 2)
+apply(arr, MARGIN = 2, FUN = mean)
+
+
+```
+
+# Data Frames
+```{r}
+# Creating a simple data frame
+df <- data.frame(
+  ID = c(111, 222, 333, 444),
+  Name = c("Tanzil", "Tahabi", "Himu", "Eamel"),
+  Age = c(23, 25, 22, 24),
+  Score = c(89.5, 76.0, 91.2, 88.8),
+  Passed = c(TRUE, FALSE, TRUE, TRUE),
+  CGPA= c(3.9,3.5,3.00,3.44)
+)
+
+# Print the data frame
+print(df)
+
+```
+
+```{r}
+# Accessing Elements in a Data Frame
+# Access a single column
+print(df$Name)  # Output: Alice Bob Charlie David
+
+# Access a specific row (row 2)
+print(df[3, ])  
+
+# Access a specific element (Row 3, Column "Score")
+print(df[4, "Score"])  # Output: 91.2
+
+# Access multiple columns
+print(df[, c("Name", "Score")])  
+
+# Access multiple rows
+print(df[1:4, ])  # First two rows
+
+```
+```{r}
+# Add a new column 'Grade'
+df$Grade <- c("A", "B", "A+", "A-")
+print(df)
+
+```
+
+```{r}
+# Filter students who passed
+passed_students <- df[df$Passed == TRUE, ]
+print(passed_students)
+
+# Filter students with Score > 85
+high_scorers <- df[df$Score > 85, ]
+print(high_scorers)
+
+```
+
+```{r}
+# Sorting by Age (Ascending)
+df_sorted <- df[order(df$Age), ]
+print(df_sorted)
+
+# Sorting by Score (Descending)
+df_sorted_desc <- df[order(-df$Score), ]
+print(df_sorted_desc)
+
+```
+
+```{r}
+# Changing a value (Changing Bob’s Score to 80)
+df$Score[df$Name == "Bob"] <- 80
+print(df)
+
+# Renaming column names
+colnames(df) <- c("Student_no", "Student_Name", "Student_Age", "Exam_Score", "Exam pass", "total_Grade")
+print(df)
+
+```
+
+```{r}
+# Remove a column
+df$Student_Age <- NULL
+print(df)
+
+# Remove a row (removing row 2)
+df <- df[-2, ]
+print(df)
+
+```
+```{r}
+# Get summary statistics
+summary(df)
+
+# Get structure of the data frame
+str(df)
+
+```
+# List
+
+```{r}
+# Creating a list with different data types
+my_list <- list(
+  Name = "Mohim",
+  Age = 25,
+  Present = c(9, 5, 8),
+  TOday = TRUE
+)
+
+# Print the list
+print(my_list)
+
+```
+```{r}
+# Access by index
+print(my_list[[1]])  # Output: "Alice"
+
+# Access by name
+print(my_list$Present)  # Output: 90 85 88
+
+# Access specific elements within a list item
+print(my_list$Present[1])  # Output: 85
+
+```
+```{r}
+# Change an element
+my_list$Age <- 26
+print(my_list$Age)  # Output: 26
+
+# Add a new element
+my_list$Country <- "Canada"
+print(my_list)
+
+# Remove an element
+my_list$Present <- NULL
+print(my_list)
+
+```
+```{r}
+# Creating a list with a matrix and a data frame
+my_complex_list <- list(
+  Numbers = c(1, 2, 3, 4),
+  Matrix = matrix(1:16, nrow = 4),
+  DataFrame = data.frame(ID = c(111, 132), Name = c("Shahed", "Tawhid"))
+)
+
+# Print the list
+print(my_complex_list)
+
+# Access elements inside the matrix
+print(my_complex_list$Matrix[3, 3])  # Access row 2, column 3
+
+```
+```{r}
+list1 <- list(A = 1:8, B = "AIUB")
+list2 <- list(C = c(TRUE, FALSE), D = matrix(1:4, nrow = 1))
+
+# Merge lists
+merged_list <- c(list1, list2)
+print(merged_list)
+
+```
+
+```{r}
+# Convert list to data frame
+list_to_df <- data.frame(
+  Name = c("Abdul", "Kader"),
+  Age = c(25, 24),
+  walking_step = c(4300, 4505)
+)
+
+print(list_to_df)
+
+```

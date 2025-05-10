@@ -1,0 +1,172 @@
+---
+title: "Data Exploration"
+author: "Abdul Kader Mohim"
+date: "`r Sys.Date()`"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+# Univariate Exploration
+
+# Load the Iris Dataset
+```{r}
+# Read CSV from a URL
+url <- "https://drive.google.com/uc?export=download&id=1mIXqkqQfonoC0IC9ZZ4GL7ZOIx3hzQdF"
+property_data <- read.csv(url)
+
+# View first few rows
+head(property_data)
+
+```
+
+# Summary Statistics
+```{r}
+# Summary of numeric variables
+summary(property_data)
+
+```
+# Univariate Plots
+```{r}
+# Histogram of Property Size
+hist(property_data$Property_Size, 
+     main="Histogram of Property Size", 
+     col="lightblue", 
+     xlab="Property Size", 
+     border="black")
+
+# Histogram of Bedrooms
+hist(property_data$Bedrooms, 
+     main="Histogram of Bedrooms", 
+     col="yellow", 
+     xlab="Bedrooms", 
+     border="black")
+
+# Histogram of Property Age
+hist(property_data$Property_Age, 
+     main="Histogram of Property Age", 
+     col="violet", 
+     xlab="Property Age", 
+     border="black")
+
+```
+```{r}
+# Density plot of Property Size
+plot(density(property_data$Property_Size), 
+     main="Density Plot of Property Size", 
+     col="blue", 
+     lwd=2)
+
+# Density plot of Bedrooms
+plot(density(property_data$Bedrooms), 
+     main="Density Plot of Bedrooms", 
+     col="red", 
+     lwd=2)
+
+# Density plot of Property Age
+plot(density(property_data$Property_Age), 
+     main="Density Plot of Property Age", 
+     col="green", 
+     lwd=2)
+
+
+```
+```{r}
+# Boxplot of Property Size
+boxplot(property_data$Property_Size, 
+        main="Box Plot of Property Size", 
+        col="orange")
+
+# Boxplot of Bedrooms
+boxplot(property_data$Bedrooms, 
+        main="Box Plot of Bedrooms", 
+        col="lightblue")
+
+# Boxplot of Property Age
+boxplot(property_data$Property_Age, 
+        main="Box Plot of Property Age", 
+        col="lightgreen")
+```
+# Exploring Categorical Data
+```{r}
+# Count of each Location Type
+table(property_data$Location_Type)
+
+# Count of each Price Range
+table(property_data$Price_Range)
+
+```
+
+```{r}
+# Bar plot for Location Type
+barplot(table(property_data$Location_Type), 
+        main="Count of Each Location Type", 
+        col=c("orange", "lightblue", "green"))
+
+# Bar plot for Price Range
+barplot(table(property_data$Price_Range), 
+        main="Count of Each Price Range", 
+        col=c("red", "blue", "brown"))
+
+```
+# Multivariate Exploration
+# Scatter Plot (Numeric vs. Numeric)
+```{r}
+# Scatter plot: Property Size vs Property Age
+plot(property_data$Property_Size, property_data$Property_Age, 
+     main="Scatter Plot of Property Size vs Property Age", 
+     xlab="Property Size", 
+     ylab="Property Age", 
+     col="blue", pch=19)
+
+# Scatter plot: Property Size vs Bedrooms
+plot(property_data$Property_Size, property_data$Bedrooms, 
+     main="Scatter Plot of Property Size vs Bedrooms", 
+     xlab="Property Size", 
+     ylab="Bedrooms", 
+     col="red", pch=19)
+
+```
+
+# Correlation (Numeric vs. Numeric)
+```{r}
+# Correlation between numeric variables
+cor(property_data[, c("Property_Size", "Bedrooms", "Property_Age")])
+
+```
+
+```{r}
+# Box Plot (Numeric vs. Categorical)
+# Box plot of Property Size by Price Range
+boxplot(Property_Size ~ Price_Range, data=property_data,
+        main="Box Plot of Property Size by Price Range",
+        col=c("red", "green", "yellow"))
+
+# Box plot of Property Age by Location Type
+boxplot(Property_Age ~ Location_Type, data=property_data,
+        main="Box Plot of Property Age by Location Type",
+        col=c("orange", "violet", "blue"))
+
+```
+# Pair Plot (Multivariate Visualization)
+```{r}
+# Pair plot (Scatter plot matrix)
+pairs(property_data[, c("Property_Size", "Bedrooms", "Property_Age")], 
+      main="Pair Plot of Numeric Variables", 
+      col=c("blue"))
+```
+```{r}
+# Load ggplot2
+library(ggplot2)
+
+# Scatter plot with regression line
+ggplot(property_data, aes(x=Property_Size, y=Property_Age, color=Price_Range)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE) +
+  ggtitle("Property Size vs Property Age by Price Range")
+
+# Box plot using ggplot2
+ggplot(property_data, aes(x=Location_Type, y=Property_Size, fill=Price_Range)) +
+  geom_boxplot() +
+  ggtitle("Property Size by Location Type and Price Range")
+```
