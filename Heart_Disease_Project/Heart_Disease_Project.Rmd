@@ -1,0 +1,861 @@
+---
+title: "Data Exploration on Heart Disease Data"
+author: "Group 9"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  html_notebook: default
+  word_document: default
+---
+
+# Univariate Exploration
+
+# Load the Dataset
+```{r}
+# Load dataset
+
+# Load necessary libraries
+library(readr)
+library(dplyr)  # %>% 
+
+# Read the CSV file from Google Drive
+url <- "https://drive.google.com/uc?export=download&id=12CriTyCML_9rGAySnmcitxXbij7N11T0"
+my_data <- read_csv(url)
+
+# View the first few rows
+head(my_data)
+
+
+
+```
+```{r}
+#Removing Unnecessary Columns
+
+my_data <- my_data %>%
+  select(-id, -dataset)
+print(my_data)
+
+```
+
+```{r}
+#Checking for Missing Data
+
+my_data[!complete.cases(my_data),]
+```
+
+```{r}
+#Handling Missing Values
+
+my_data[is.na(my_data$trestbps),]
+
+
+# Calculate the median
+trestbps_medv <- median(my_data$trestbps, na.rm = TRUE)
+print(trestbps_medv)
+
+# Replace NA values with the median
+my_data$trestbps[is.na(my_data$trestbps)] <- trestbps_medv
+
+# Print updated data
+print(my_data)
+
+
+my_data[is.na(my_data$trestbps),]
+
+```
+```{r}
+# Handling Missing Values
+
+my_data[is.na(my_data$chol),]
+
+chol_meanv<- mean(my_data$chol, na.rm=TRUE)
+print(chol_meanv)
+
+my_data$chol[is.na(my_data$chol)] <- chol_meanv
+
+print(my_data)
+my_data[is.na(my_data$chol),]
+```
+```{r}
+# Handling Missing Values
+
+my_data[is.na(my_data$thalch),]
+
+thalch_meanv<- mean(my_data$thalch, na.rm=TRUE)
+print(thalch_meanv)
+
+my_data$thalch[is.na(my_data$thalch)] <- thalch_meanv
+
+print(my_data)
+my_data[is.na(my_data$thalch),]
+```
+```{r}
+# Handling Missing Values
+
+my_data[is.na(my_data$ca),]
+
+# Find the most frequent value (mode) for 'ca'
+mode_ca <- as.numeric(names(sort(table(my_data$ca), decreasing = TRUE))[1])
+print(mode_ca)
+
+my_data$ca[is.na(my_data$ca)] <- mode_ca
+
+
+print(my_data)
+
+
+my_data[is.na(my_data$ca),]
+
+```
+
+```{r}
+# Handling Missing Values
+
+my_data[is.na(my_data$thal),]
+
+# Find the most frequent value (mode) for 'thal'
+mode_thal <- as.character(names(sort(table(my_data$thal), decreasing = TRUE))[1])
+print(mode_thal)
+
+
+my_data$thal[is.na(my_data$thal)] <- mode_thal
+
+
+print(my_data)
+
+
+my_data[is.na(my_data$thal),]
+
+```
+```{r}
+# Handling Missing Values
+
+my_data[is.na(my_data$slope),]
+
+# Find the most frequent value (mode) for 'slope'
+mode_slope <- names(sort(table(my_data$slope), decreasing = TRUE))[1]
+print(mode_slope)
+
+
+my_data$slope[is.na(my_data$slope)] <- mode_slope
+
+
+print(my_data)
+
+my_data[is.na(my_data$slope),]
+
+```
+
+
+
+
+```{r}
+#Checking for Remaining Missing Data
+
+my_data[!complete.cases(my_data),]
+```
+```{r}
+#Remove records with missing values
+my_data<-my_data[complete.cases(my_data),]
+print(my_data)
+my_data[!complete.cases(my_data),]
+```
+
+# Summary Statistics
+```{r}
+# Summary of numeric variables
+summary(my_data)
+
+```
+# Univariate Plots
+```{r}
+
+hist(my_data$age, 
+     main="Histogram of Age", 
+     col="lightblue", 
+     xlab="Age", 
+     border="black")
+
+```
+```{r}
+
+hist(my_data$trestbps, 
+     main="Histogram of trestbps ", 
+     col="green", 
+     xlab="trestbps", 
+     border="black")
+
+```
+# Univariate Plots
+```{r}
+
+hist(my_data$chol, 
+     main="Histogram of chol", 
+     col="yellow", 
+     xlab="chol", 
+     border="black")
+
+```
+
+
+# Univariate Plots
+```{r}
+
+hist(my_data$thalch, 
+     main="Histogram of thalch ", 
+     col="blue", 
+     xlab="thalch", 
+     border="black")
+
+```
+```{r}
+
+hist(my_data$oldpeak, 
+     main="Histogram of oldpeak", 
+     col="lightblue", 
+     xlab="oldpeak", 
+     border="black")
+
+```
+```{r}
+
+hist(my_data$ca, 
+     main="Histogram of Chest pain", 
+     col="lightblue", 
+     xlab="Ca", 
+     border="black")
+
+```
+```{r}
+
+hist(my_data$num, 
+     main="Histogram of num", 
+     col="lightblue", 
+     xlab="num", 
+     border="black")
+
+```
+```{r}
+# Convert 'restecg' to numeric
+my_data$restecg <- as.numeric(factor(my_data$restecg, levels = c("normal", "lv hypertrophy", "st-t abnormality")))
+
+# Convert 'fbs' (fasting blood sugar) to numeric
+my_data$fbs <- ifelse(my_data$fbs == TRUE, 1, 0)
+
+# Convert 'slope' to numeric
+my_data$slope <- as.numeric(factor(my_data$slope, levels = c("upsloping", "flat", "downsloping")))
+
+
+
+my_data$num <- as.factor(my_data$num)
+
+# Update the levels of 'num' to represent meaningful categories
+levels(my_data$num) <- c("No Heart Disease", "Heart Disease -Type1", "Heart Disease -Type2", "Heart Disease -Type3","Heart Disease -Type4")
+
+
+str(my_data)
+
+# Print the first few rows to verify the new labels
+head(my_data)
+
+```
+```{r}
+
+hist(my_data$restecg, 
+     main="Histogram of restecg", 
+     col="lightblue", 
+     xlab="restecg", 
+     border="black")
+
+```
+
+
+
+```{r}
+
+hist(my_data$fbs, 
+     main="Histogram of fbs", 
+     col="lightblue", 
+     xlab="fbs", 
+     border="black")
+
+```
+
+
+```{r}
+
+hist(my_data$slope, 
+     main="Histogram of slope", 
+     col="lightblue", 
+     xlab="slope", 
+     border="black")
+
+```
+
+
+
+
+```{r}
+
+# Density Plot (Smooth Distribution)
+plot(density(my_data$age), 
+     main="Density Plot of Age", 
+     col="blue", 
+     lwd=2)
+
+```
+```{r}
+
+# Density Plot (Smooth Distribution)
+plot(density(my_data$trestbps), 
+     main="Density Plot of trestbps", 
+     col="blue", 
+     lwd=2)
+
+```
+
+
+```{r}
+
+# Density Plot (Smooth Distribution)
+plot(density(my_data$chol), 
+     main="Density Plot of chol ", 
+     col="blue", 
+     lwd=2)
+
+```
+
+
+```{r}
+
+# Density Plot (Smooth Distribution)
+plot(density(my_data$thalch), 
+     main="Density Plot of thalch", 
+     col="blue", 
+     lwd=2)
+
+```
+
+```{r}
+
+# Density Plot (Smooth Distribution)
+plot(density(my_data$oldpeak), 
+     main="Density Plot of oldpeak", 
+     col="blue", 
+     lwd=2)
+
+```
+
+```{r}
+
+# Density Plot (Smooth Distribution)
+plot(density(my_data$slope), 
+     main="Density Plot of slope", 
+     col="blue", 
+     lwd=2)
+
+```
+
+
+```{r}
+
+# Density Plot (Smooth Distribution)
+plot(density(my_data$restecg), 
+     main="Density Plot of restecg", 
+     col="blue", 
+     lwd=2)
+
+```
+
+
+
+```{r}
+
+# Boxplot 
+boxplot(my_data$age, 
+        main="Box Plot of Age", 
+        col="orange")
+
+```
+
+
+```{r}
+
+# Boxplot 
+boxplot(my_data$trestbps, 
+        main="Box Plot of trestbps ", 
+        col="orange")
+
+```
+```{r}
+
+# Boxplot 
+boxplot(my_data$chol, 
+        main="Box Plot of chol", 
+        col="orange")
+
+```
+
+```{r}
+
+# Boxplot 
+boxplot(my_data$restecg, 
+        main="Box Plot of restecg ", 
+        col="orange")
+
+```
+```{r}
+
+# Boxplot 
+boxplot(my_data$thalch, 
+        main="Box Plot of thalch", 
+        col="orange")
+
+```
+
+```{r}
+
+# Boxplot 
+boxplot(my_data$oldpeak, 
+        main="Box Plot of oldpeak", 
+        col="orange")
+
+```
+
+
+
+# Exploring Categorical Data
+```{r}
+
+# Count of each num of affected people 
+table(my_data$num)
+
+```
+
+
+
+```{r}
+# Bar plot for count
+barplot(table(my_data$num), 
+        main="Count of num", 
+        col=c("red", "green", "blue"))
+
+```
+```{r}
+# Bar plot for  count
+barplot(table(my_data$sex), 
+        main="Count of sex", 
+        col=c("red", "green", "blue"))
+
+```
+```{r}
+# Bar plot for  count
+barplot(table(my_data$cp), 
+        main="Count of cp", 
+        col=c("red", "green", "blue"))
+
+```
+```{r}
+# Bar plot for  count
+barplot(table(my_data$trestbps), 
+        main="Count of trestbps", 
+        col=c("red", "green", "blue"))
+
+```
+```{r}
+# Bar plot for count
+barplot(table(my_data$slope), 
+        main="Count of slope", 
+        col=c("red", "green", "blue"))
+
+```
+
+
+```{r}
+# Bar plot for Species count
+barplot(table(my_data$thal), 
+        main="Count of thal", 
+        col=c("red", "green", "blue"))
+
+```
+
+
+
+
+
+# Multivariate Exploration
+# Scatter Plot (Numeric vs. Numeric)
+```{r}
+# Scatter plot: age vs trestbps
+plot(my_data$age, my_data$trestbps, 
+     main="Scatter Plot of Age vs trestbps",
+     xlab="age", ylab="trestbps",
+     col=my_data$num, pch=20)
+legend("bottomright", legend=levels(my_data$num), col=1:4, pch=19)
+
+```
+# Multivariate Exploration
+# Scatter Plot (Numeric vs. Numeric)
+```{r}
+# Scatter plot: thalch vs chol
+plot(my_data$thalch, my_data$chol, 
+     main="Scatter Plot of thalch vs chol",
+     xlab="thalch", ylab="chol",
+     col=my_data$num, pch=20)
+legend("topleft", legend=levels(my_data$num), col=1:4, pch=20)
+
+```
+
+```{r}
+# Scatter plot: thalch vs trestbps
+plot(my_data$thalch, my_data$trestbps, 
+     main="Scatter Plot of thalch vs trestbps",
+     xlab="thalch", ylab="trestbps",
+     col=my_data$num, pch=20)
+legend("bottomleft", legend=levels(my_data$num), col=1:4, pch=20)
+
+```
+
+
+
+# Correlation (Numeric vs. Numeric)
+```{r}
+# Correlation between age and trestbs
+cor(my_data$age, my_data$trestbps)
+
+```
+```{r}
+# Correlation between age and trestbs
+cor(my_data$age, my_data$chol)
+
+```
+```{r}
+# Correlation between chol and trestbs
+cor(my_data$chol, my_data$trestbps)
+
+```
+```{r}
+# Correlation between thalch and trestbs
+cor(my_data$thalch, my_data$trestbps)
+
+```
+
+```{r}
+# Correlation between age and thalch
+cor(my_data$age, my_data$thalch)
+
+```
+```{r}
+```
+
+
+```{r}
+# Correlation between age and slope
+cor(my_data$age, my_data$slope)
+
+```
+
+# Correlation matrix
+```{r}
+
+# Select only numeric columns
+numeric_cols <- sapply(my_data, is.numeric)
+correlation_matrix <- cor(my_data[, numeric_cols], use = "complete.obs")
+
+# Print the correlation matrix
+print(correlation_matrix)
+
+
+```
+```{r}
+library(corrplot)
+
+# Calculate correlation matrix
+numeric_cols <- sapply(my_data, is.numeric)
+correlation_matrix <- cor(my_data[, numeric_cols], use = "complete.obs")
+
+# Create heatmap with correlation values
+corrplot(correlation_matrix, 
+         method = "color",
+         type = "upper",
+         order = "hclust",
+         tl.col = "black",
+         tl.srt = 45,
+         addCoef.col = "black",
+         number.cex = 0.7,
+         diag = FALSE)
+```
+
+
+```{r}
+library(plotly)
+
+plot_ly(
+  x = colnames(correlation_matrix),
+  y = colnames(correlation_matrix),
+  z = correlation_matrix,
+  type = "heatmap",
+  colorscale = "Viridis",
+  hoverinfo = "x+y+z"
+) %>% 
+  layout(
+    title = "Interactive Correlation Matrix",
+    xaxis = list(tickangle = 45),
+    margin = list(l = 100, r = 100, b = 150)
+  )
+```
+
+# Box Plot (Numeric vs. Categorical)
+```{r}
+# Boxplot: Cholesterol by Heart Disease Status
+boxplot(chol ~ num, data = my_data,
+        main = "Boxplot of Cholesterol by Heart Disease Status",
+        xlab = "Heart Disease",
+        ylab = "Cholesterol",
+        col = c("skyblue", "tomato"))
+
+```
+# Box Plot (Numeric vs. Categorical)
+```{r}
+# Boxplot: Thalch by Sex
+boxplot(thalch ~ sex, data = my_data,
+        main = "Boxplot of Max Heart Rate by Sex",
+        xlab = "Sex",
+        ylab = "Max Heart Rate (thalch)",
+        col = c("lightpink", "lightblue"))
+
+
+```
+# Box Plot (Numeric vs. Categorical)
+```{r}
+# Boxplot: Oldpeak by Chest Pain Type
+boxplot(oldpeak ~ cp, data = my_data,
+        main = "Boxplot of ST Depression (Oldpeak) by Chest Pain Type",
+        xlab = "Chest Pain Type",
+        ylab = "Oldpeak",
+        col = rainbow(length(unique(my_data$cp))))
+
+```
+# Box Plot (Numeric vs. Categorical)
+```{r}
+# Boxplot: Trestbps by Slope
+boxplot(trestbps ~ slope, data = my_data,
+        main = "Boxplot of Resting BP by Slope of Peak Exercise ST",
+        xlab = "Slope Type",
+        ylab = "Resting Blood Pressure",
+        col = c("orange", "cyan", "lightgreen"))
+```
+
+
+```{r}
+library(ggplot2)
+ggplot(my_data, aes(x = as.factor(num), y = chol, fill = as.factor(num))) +
+  geom_boxplot() +
+  ggtitle("Cholesterol Levels by Heart Disease Class") +
+  xlab("Heart Disease Class (num)") +
+  ylab("Serum Cholesterol (mg/dl)") +
+  theme_minimal()
+
+
+
+```
+
+
+
+install.packages("ggplot2")
+# Pair Plot (Multivariate Visualization)
+```{r}
+
+pairs(my_data[, c("age", "trestbps", "chol", "thalch", "oldpeak")],
+      col = my_data$num,
+      pch = 19,
+      main = "Pair Plot of Selected Features Colored by Heart Disease")
+
+```
+
+
+# Using ggplot2 for Enhanced Visualization
+```{r}
+
+library(ggplot2)
+
+my_data$num <- as.factor(my_data$num)
+
+
+ggplot(my_data, aes(x = age, y = thalch, color = num)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Age vs Max Heart Rate (thalch) by Heart Disease Class") +
+  xlab("Age") +
+  ylab("Max Heart Rate Achieved (thalch)")
+
+
+```
+
+
+# Using ggplot2 for Enhanced Visualization
+```{r}
+
+
+
+ggplot(my_data, aes(x = trestbps, y = chol, color = num)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Resting Blood Pressure vs Cholesterol by Heart Disease Class") +
+  xlab("Resting Blood Pressure (trestbps)") +
+  ylab("Serum Cholesterol (chol)")
+
+
+```
+
+
+# Using ggplot2 for Enhanced Visualization
+```{r}
+
+# Scatter plot with regression line for thalch vs chol
+ggplot(my_data, aes(x = thalch, y = chol, color = num)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Maximum Heart Rate Achieved vs Cholesterol by Heart Disease Class") +
+  xlab("Maximum Heart Rate Achieved (thalch)") +
+  ylab("Serum Cholesterol (chol)") +
+  theme_minimal()
+
+
+
+
+```
+# Using ggplot2 for Enhanced Visualization
+```{r}
+# Load necessary libraries
+library(caret)
+
+# Select numeric columns for scaling
+numeric_cols <- c("age", "trestbps", "chol", "thalch", "oldpeak")
+
+# Apply standardization (z-score normalization)
+preProcValues <- preProcess(my_data[, numeric_cols], method = c("center", "scale"))
+my_data_scaled <- predict(preProcValues, my_data[, numeric_cols])
+
+# Replace original columns with scaled versions
+my_data[, numeric_cols] <- my_data_scaled
+
+# Verify the transformation
+summary(my_data[, numeric_cols])
+```
+
+
+```{r}
+# Binary encoding for sex (Male=1, Female=0)
+my_data$sex <- ifelse(my_data$sex == "Male", 1, 0)
+
+# Ensure fbs is integer (fasting blood sugar > 120 mg/dl)
+my_data$fbs <- as.integer(my_data$fbs)
+
+# Convert target variable to factor
+my_data$num <- as.factor(my_data$num)
+
+# Identify numeric columns for scaling (excluding already encoded categoricals and target)
+numeric_cols <- c("age", "trestbps", "chol", "thalch", "oldpeak", "ca")
+
+# Apply standardization (z-score normalization)
+library(caret)
+preProcValues <- preProcess(my_data[, numeric_cols], method = c("center", "scale"))
+
+# View the structure of your data
+str(my_data)
+```
+
+
+
+
+```{r}
+# Check the first few rows
+head(my_data)
+```
+
+
+```{r}
+# Function to detect outliers using IQR method
+detect_outliers <- function(x) {
+  Q1 <- quantile(x, 0.25, na.rm = TRUE)
+  Q3 <- quantile(x, 0.75, na.rm = TRUE)
+  IQR <- Q3 - Q1
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+  x < lower_bound | x > upper_bound
+}
+
+# Check for outliers in numeric columns
+outliers_list <- lapply(my_data[, numeric_cols], detect_outliers)
+outliers_count <- sapply(outliers_list, sum)
+print(outliers_count)
+```
+
+
+```{r}
+# Boxplots to visualize outliers
+par(mfrow = c(2, 3))
+for (col in numeric_cols) {
+  boxplot(my_data[[col]], main = paste("Boxplot of", col))
+}
+par(mfrow = c(1, 1))
+```
+
+
+```{r}
+# 1. Robust Scaling
+library(caret)
+robust_scaler <- preProcess(my_data[, numeric_cols],
+                          method = c("center", "scale", "YeoJohnson"))
+my_data[, numeric_cols] <- predict(robust_scaler, my_data[, numeric_cols])
+
+# 2. Check for zero-IQR columns
+zero_iqr_cols <- sapply(my_data[, numeric_cols], function(x) IQR(x, na.rm = TRUE) == 0)
+if(any(zero_iqr_cols)) {
+  message("Columns with IQR=0: ", paste(names(zero_iqr_cols)[zero_iqr_cols], collapse = ", "))
+
+  valid_cols <- names(zero_iqr_cols)[!zero_iqr_cols]
+}
+
+# 3. Multivariate Outlier Detection (with fallback)
+library(MASS)
+
+if(length(valid_cols) > 1) {  # Need at least 2 columns for covariance
+  tryCatch({
+    mcd <- cov.mcd(my_data[, valid_cols])
+    mahalanobis_dist <- mahalanobis(my_data[, valid_cols], 
+                                  mcd$center, 
+                                  mcd$cov)
+    cutoff <- qchisq(0.99, df = length(valid_cols))
+    outliers <- mahalanobis_dist > cutoff
+    
+    # 4. Handle outliers (capping approach)
+    my_data[outliers, valid_cols] <- 
+      apply(my_data[outliers, valid_cols], 2, 
+            function(x) pmin(pmax(x, 
+                                 quantile(x, 0.01, na.rm = TRUE)),
+                            quantile(x, 0.99, na.rm = TRUE)))
+  }, error = function(e) {
+    message("MCD failed, using regular Mahalanobis: ", e$message)
+    # Fallback to regular Mahalanobis
+    mahalanobis_dist <- mahalanobis(my_data[, valid_cols], 
+                                  colMeans(my_data[, valid_cols]), 
+                                  cov(my_data[, valid_cols]))
+    cutoff <- qchisq(0.99, df = length(valid_cols))
+    outliers <- mahalanobis_dist > cutoff
+  })
+} else {
+  message("Insufficient valid columns for multivariate outlier detection")
+  outliers <- rep(FALSE, nrow(my_data))
+}
+
+# 5. Final Verification
+summary(my_data[, numeric_cols])
+boxplot(my_data[, numeric_cols], main = "Post-Processing Distributions")
+```
+
+
+
